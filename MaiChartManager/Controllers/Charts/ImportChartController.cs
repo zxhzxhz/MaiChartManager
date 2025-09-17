@@ -532,6 +532,9 @@ public partial class ImportChartController(StaticSettings settings, ILogger<Stat
         music.AddVersionId = addVersionId;
         music.GenreId = genreId;
         music.Version = version;
+        float wholebpm;
+        if (float.TryParse(maiData.GetValueOrDefault("wholebpm"), out wholebpm))
+            music.Bpm = wholebpm;
         music.Save();
         music.Refresh();
         return new ImportChartResult(errors, false);
