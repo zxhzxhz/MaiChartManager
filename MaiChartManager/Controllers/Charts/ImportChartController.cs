@@ -333,7 +333,11 @@ public partial class ImportChartController(StaticSettings settings, ILogger<Stat
     [GeneratedRegex(@"\|\|.*$", RegexOptions.Multiline)]
     private static partial Regex SimaiCommentRegex();
 
-    [GeneratedRegex(@"#.*$", RegexOptions.Multiline)]
+    /*
+     * 根据[simai文档](https://w.atwiki.jp/simai/pages/1002.html)，井号如果出现在[]或{}内是合法语法，并非注释。
+     * 因此在尝试匹配注释时，应该排除掉#前面有未闭合的[或{的情况。
+     */
+    [GeneratedRegex(@"(?<!\[[^\]]*|\{[^\}]*)#.*$", RegexOptions.Multiline)]
     private static partial Regex SimaiCommentRegex2();
 
     [HttpPost]
