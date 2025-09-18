@@ -130,6 +130,8 @@ public partial class ImportChartController(StaticSettings settings, ILogger<Stat
         }
         catch (Exception e)
         {
+            errors.Add(new ImportChartMessage($"MaiLib 解析谱面难度 {level} 时报错：\n{MaiLibErrMsgRegex().Replace(e.Message, "")}\n" +
+                                              $"这往往是谱面中的语句不够规范导致的，您可尝试根据报错对谱面进行修复。", MessageLevel.Warning));
             logger.LogWarning(e, "无法在手动修正错误后解析谱面");
         }
 
@@ -339,6 +341,9 @@ public partial class ImportChartController(StaticSettings settings, ILogger<Stat
      */
     [GeneratedRegex(@"(?<!\[[^\]]*|\{[^\}]*)#.*$", RegexOptions.Multiline)]
     private static partial Regex SimaiCommentRegex2();
+
+    [GeneratedRegex(@"Original Stack.*", RegexOptions.Singleline)]
+    private static partial Regex MaiLibErrMsgRegex();
 
     [HttpPost]
     // 创建完 Music 后调用
