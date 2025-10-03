@@ -158,6 +158,7 @@ export enum HardwareAccelerationStatus {
 export interface IConfigComment {
   commentEn?: string | null;
   commentZh?: string | null;
+  nameZh?: string | null;
 }
 
 export interface IConfigEntryAttribute {
@@ -170,6 +171,7 @@ export interface IConfigSectionAttribute {
   exampleHidden?: boolean;
   defaultOn?: boolean;
   alwaysEnabled?: boolean;
+  name?: string | null;
 }
 
 export interface IEntryState {

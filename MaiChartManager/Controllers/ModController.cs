@@ -115,7 +115,7 @@ public class ModController(StaticSettings settings, ILogger<ModController> logge
     [NonAction]
     private static void CheckConfigApiVersion(HeadlessConfigInterface configInterface)
     {
-        var currentSupportedApiVersion = new Version(1, 0);
+        var currentSupportedApiVersion = new Version(1, 1);
         var configApiVersion = new Version(configInterface.ApiVersion);
         if (currentSupportedApiVersion.Major != configApiVersion.Major)
         {

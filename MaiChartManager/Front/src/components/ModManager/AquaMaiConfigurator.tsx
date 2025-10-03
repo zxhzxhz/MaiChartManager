@@ -14,9 +14,9 @@ const getSectionPanelOverride = (path: string) => {
   return (sectionPanelOverrides[`./sectionPanelOverride/${path}/index.tsx`] as any)?.default
 }
 
-const getNameForPath = (path: string, name: string) => {
-  if (comments.nameOverrides[path]) return comments.nameOverrides[path]
-  return capitalCase(name)
+const getNameForPath = (path: string, name: string, nameBuiltin?: string | null) => {
+  // if (comments.nameOverrides[path]) return comments.nameOverrides[path]
+  return nameBuiltin || capitalCase(name)
 }
 
 const ConfigEntry = defineComponent({
@@ -25,7 +25,7 @@ const ConfigEntry = defineComponent({
     entryState: { type: Object as PropType<IEntryState>, required: true },
   },
   setup(props, { emit }) {
-    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!)} labelPlacement="left" labelWidth="10em"
+    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!, props.entry.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em"
       // @ts-ignore
                             title={props.entry.path!}
     >
@@ -73,7 +73,7 @@ const ConfigSection = defineComponent({
     const CustomPanel = getSectionPanelOverride(props.section.path!);
 
     return () => <NFlex vertical class="p-1 border-transparent border-solid border-1px rd hover:border-yellow-5">
-      {!props.section.attribute!.alwaysEnabled && <NFormItem label={getNameForPath(props.section.path!, props.section.path!.split('.').pop()!)} labelPlacement="left" labelWidth="10em"
+      {!props.section.attribute!.alwaysEnabled && <NFormItem label={getNameForPath(props.section.path!, props.section.path!.split('.').pop()!, props.section.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em"
         // @ts-ignore
                                                              title={props.section.path!}
       >
