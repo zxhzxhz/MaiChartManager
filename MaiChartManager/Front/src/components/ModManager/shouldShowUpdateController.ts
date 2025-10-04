@@ -1,7 +1,7 @@
 import { computed } from "vue";
 import { modInfo, modUpdateInfo } from "@/store/refs";
 
-function compareVersions(v1: string, v2: string) {
+export function compareVersions(v1: string, v2: string) {
   const parts1 = v1.split('.').map(Number);
   const parts2 = v2.split('.').map(Number);
 
