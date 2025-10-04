@@ -25,7 +25,7 @@ const ConfigEntry = defineComponent({
     entryState: { type: Object as PropType<IEntryState>, required: true },
   },
   setup(props, { emit }) {
-    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!, props.entry.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em"
+    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!, props.entry.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em" showFeedback={false}
       // @ts-ignore
                             title={props.entry.path!}
     >
@@ -73,7 +73,7 @@ const ConfigSection = defineComponent({
     const CustomPanel = getSectionPanelOverride(props.section.path!);
 
     return () => <NFlex vertical class="p-1 border-transparent border-solid border-1px rd hover:border-yellow-5">
-      {!props.section.attribute!.alwaysEnabled && <NFormItem label={getNameForPath(props.section.path!, props.section.path!.split('.').pop()!, props.section.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em"
+      {!props.section.attribute!.alwaysEnabled && <NFormItem label={getNameForPath(props.section.path!, props.section.path!.split('.').pop()!, props.section.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em" showFeedback={false}
         // @ts-ignore
                                                              title={props.section.path!}
       >
@@ -121,10 +121,12 @@ export default defineComponent({
       const s = search.value.toLowerCase();
       return props.config.sections?.filter(it =>
         it.path?.toLowerCase().includes(s) ||
+        it.attribute?.comment?.nameZh?.toLowerCase().includes(s) ||
         it.attribute?.comment?.commentZh?.toLowerCase().includes(s) ||
         it.attribute?.comment?.commentEn?.toLowerCase().includes(s) ||
         it.entries?.some(entry => entry.name?.toLowerCase().includes(s) || entry.path?.toLowerCase().includes(s) ||
-          entry.attribute?.comment?.commentZh?.toLowerCase().includes(s) || entry.attribute?.comment?.commentEn?.toLowerCase().includes(s))
+          entry.attribute?.comment?.commentZh?.toLowerCase().includes(s) || entry.attribute?.comment?.commentEn?.toLowerCase().includes(s) ||
+          entry.attribute?.comment?.nameZh?.toLowerCase().includes(s))
       );
     })
 
