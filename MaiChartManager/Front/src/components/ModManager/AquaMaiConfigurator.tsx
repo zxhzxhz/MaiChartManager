@@ -152,11 +152,11 @@ export default defineComponent({
         // @ts-ignore
                   id="scroll"
       >
-        <div class={'px-2 sticky top-0 z-200'}>
+        <div class={'px-2 absolute top-1 left-2 right-2 z-200'}>
           <NInput v-model:value={search.value} placeholder="搜索" size="small" clearable ref={searchRef}/>
         </div>
         {bigSections.value.map((big) => <div id={big} key={big}>
-          <NDivider titlePlacement="left" class="mt-2!">{big}</NDivider>
+          <NDivider titlePlacement="left" class="mt-0! pt-8">{big}</NDivider>
           {filteredSections.value?.filter(it => {
             if (props.useNewSort) {
               return configSort.value[big!].includes(it.path!);
