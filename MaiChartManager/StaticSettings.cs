@@ -299,6 +299,7 @@ public partial class StaticSettings
         }
 
         var imageAssetsDir = config.GetEntryState("GameSystem.Assets.LoadLocalImages.ImageAssetsDir");
+        // 旧版兼容
         var localAssetsDir = config.GetEntryState("GameSystem.Assets.LoadLocalImages.LocalAssetsDir");
         var movieAssetsDir = config.GetEntryState("GameSystem.Assets.MovieLoader.MovieAssetsDir");
         var skinAssetsDir = config.GetEntryState("Fancy.CustomSkins.SkinsDir");

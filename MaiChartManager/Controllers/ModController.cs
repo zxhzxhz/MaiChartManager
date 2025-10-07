@@ -226,13 +226,13 @@ public class ModController(StaticSettings settings, ILogger<ModController> logge
                 var newEntryValue = newEntryState.Value.Deserialize(entry.Field.FieldType, jsonOptions);
                 if (!oldEntryState.Value.Equals(newEntryValue))
                 {
-                    logger.LogInformation("Not same: {Path}, {type1}, {newEntryValue}, {type2}, {oldEntryState}", entry.Path, newEntryValue?.GetType(), newEntryValue, oldEntryState.Value?.GetType(),
-                        oldEntryState.Value);
+                    // logger.LogInformation("Not same: {Path}, {type1}, {newEntryValue}, {type2}, {oldEntryState}", entry.Path, newEntryValue?.GetType(), newEntryValue, oldEntryState.Value?.GetType(),
+                    //     oldEntryState.Value);
                     configEdit.SetEntryValue(entry, newEntryValue);
                 }
                 else if (!newEntryState.IsDefault)
                 {
-                    logger.LogInformation("Not default: {Path}", entry.Path);
+                    // logger.LogInformation("Not default: {Path}", entry.Path);
                     configEdit.SetEntryValue(entry, newEntryValue);
                 }
             }
