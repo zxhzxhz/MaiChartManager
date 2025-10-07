@@ -46,7 +46,7 @@ export default defineComponent({
         <NModal
           preset="card"
           class="w-[min(30vw,25em)]"
-          title="新建资源目录"
+          title="新建 Opt"
           v-model:show={show.value}
         >{{
           default: () => <NForm label-placement="left" labelWidth="5em" showFeedback={false}>

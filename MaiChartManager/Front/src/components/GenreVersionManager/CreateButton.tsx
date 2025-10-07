@@ -64,7 +64,7 @@ export default defineComponent({
               <NFormItem label="ID">
                 <NInputNumber v-model:value={id.value} class="w-full" min={1}/>
               </NFormItem>
-              <NFormItem label="资源目录">
+              <NFormItem label="Opt">
                 <NSelect
                   v-model:value={assetDir.value}
                   options={assetDirs.value.filter(it => it.dirName !== 'A000').map(dir => ({label: dir.dirName!, value: dir.dirName!}))}

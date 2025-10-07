@@ -11,12 +11,12 @@ export default defineComponent({
     const show = ref(false);
 
     return () => <NButton secondary onClick={() => show.value = true}>
-      资源目录管理
+      Opt 管理
 
       <NModal
         preset="card"
         class="w-[min(70vw,80em)]"
-        title="资源目录管理"
+        title="Opt 管理"
         v-model:show={show.value}
       >
         <NFlex vertical size="large">

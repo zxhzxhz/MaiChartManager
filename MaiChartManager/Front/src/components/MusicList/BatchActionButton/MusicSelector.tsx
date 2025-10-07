@@ -23,8 +23,8 @@ export default defineComponent({
       filter: (value, row) => {
         if (!value) return true;
         value = value.toString().toLowerCase();
-        return row.name!.toLowerCase().includes(value) || 
-          row.artist!.toLowerCase().includes(value) || 
+        return row.name!.toLowerCase().includes(value) ||
+          row.artist!.toLowerCase().includes(value) ||
           row.charts!.some(chart => chart.designer?.toLowerCase().includes(value)) ||
           dxdata.songs.find(it => it.title.toLowerCase() === row.name?.toLowerCase())?.searchAcronyms?.some(acronym => acronym.toLowerCase().includes(value)) ||
           row.id!.toString().includes(value) || // match by ID
@@ -34,7 +34,7 @@ export default defineComponent({
     } satisfies DataTableBaseColumn<MusicXmlWithABJacket>)
     const columns = computed(() => [
       { type: 'selection' },
-      { title: '资源目录', key: 'assetDir', width: '8em', filter: "default", filterOptions: _.uniq(musicListAll.value.map(it => it.assetDir!)).map(it => ({ label: it, value: it })) },
+      { title: 'Opt', key: 'assetDir', width: '8em', filter: "default", filterOptions: _.uniq(musicListAll.value.map(it => it.assetDir!)).map(it => ({ label: it, value: it })) },
       {
         title: 'ID',
         key: 'id',
