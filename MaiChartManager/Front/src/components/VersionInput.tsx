@@ -12,7 +12,9 @@ export default defineComponent({
       get: () => props.value || 0,
       set: (v) => emit('update:value', v)
     })
-    const b15val = computed(() => 20000 + (version.value?.gameVersion || 45) * 100);
+    const gameVersion = computed(() => version.value?.gameVersion || 45)
+    // 从1.60起，b15算最近两个版本
+    const b15val = computed(() => 20000 + (gameVersion.value >= 60 ? gameVersion.value - 5 : gameVersion.value) * 100);
 
     return () => <NInputGroup>
       <NInputNumber showButton={false} class="w-full" v-model:value={value.value} min={0}/>
@@ -31,9 +33,9 @@ export default defineComponent({
           </NInputGroupLabel>,
           default: () => <div>
             如果游戏版本是
-            <span class="c-orange"> 1.{version.value?.gameVersion || 45} </span>
+            <span class="c-orange"> 1.{gameVersion.value} </span>
             的话，这里的数字大于等于
-            <span class="c-orange"> 2{version.value?.gameVersion || 45}00 </span>
+            <span class="c-orange"> {b15val.value} </span>
             就会让歌出现在 B15 里面，否则就会出现在 B35 里面
           </div>
         }}
