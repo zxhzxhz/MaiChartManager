@@ -3,7 +3,7 @@ import { NButton, NCheckbox, NFlex, NModal, NSwitch, useDialog, useMessage } fro
 import api from "@/client/api";
 import { globalCapture, modInfo, updateModInfo, updateMusicList, aquaMaiConfig as config, modUpdateInfo } from "@/store/refs";
 import AquaMaiConfigurator from "./AquaMaiConfigurator";
-import { compareVersions, shouldShowUpdate } from "./shouldShowUpdateController";
+import { compareVersions, latestVersion, shouldShowUpdate } from "./shouldShowUpdateController";
 import { useStorage } from "@vueuse/core";
 import _ from "lodash";
 import ModInstallDropdown from "@/components/ModManager/ModInstallDropdown";
@@ -11,17 +11,12 @@ import ModInstallDropdown from "@/components/ModManager/ModInstallDropdown";
 export default defineComponent({
   props: {
     show: Boolean,
-    disableBadge: Boolean,
     badgeType: String,
   },
   setup(props, { emit }) {
     const show = computed({
       get: () => props.show,
       set: (val) => emit('update:show', val)
-    })
-    const disableBadge = computed({
-      get: () => props.disableBadge,
-      set: (val) => emit('update:disableBadge', val)
     })
 
     const configReadErr = ref('')
@@ -30,16 +25,6 @@ export default defineComponent({
     const installingMelonLoader = ref(false)
     const useNewSort = useStorage('useNewSort', true)
     const message = useMessage();
-    const latestAquaMaiVersion = computed(() => {
-      const defaultVersionInfo =
-        modUpdateInfo.value?.find(it => it.default) ||
-        modUpdateInfo.value?.[0] || { type: 'builtin' };
-      let latestVersion = defaultVersionInfo.type === "builtin" ? modInfo.value!.bundledAquaMaiVersion! : defaultVersionInfo.version!;
-      if (latestVersion.startsWith('v')) {
-        latestVersion = latestVersion.substring(1);
-      }
-      return latestVersion;
-    })
 
     const updateAquaMaiConfig = async () => {
       try {
@@ -129,13 +114,12 @@ export default defineComponent({
             <span class="c-red-6">未安装</span>}
           <ModInstallDropdown updateAquaMaiConfig={updateAquaMaiConfig}/>
           已安装:
-          <span>{modInfo.value.aquaMaiVersion}</span>
+          <span>v{modInfo.value.aquaMaiVersion}</span>
           可安装:
-          <span class={shouldShowUpdate.value ? "c-orange" : ""}>{latestAquaMaiVersion.value}</span>
+          <span class={shouldShowUpdate.value ? "c-orange" : ""}>{latestVersion.value.version}</span>
           <NSwitch v-model:value={useNewSort.value} class="m-l"/>
           使用新的排序方式
         </NFlex>
-        {props.badgeType && <NCheckbox v-model:checked={disableBadge.value}>隐藏按钮上的角标</NCheckbox>}
         {configReadErr.value ? <NFlex vertical justify="center" align="center" class="min-h-100">
           <div class="text-8">AquaMai 未安装或需要更新</div>
           <div class="c-gray-5 text-lg">{configReadErr.value}</div>
