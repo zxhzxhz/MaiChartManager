@@ -130,6 +130,8 @@ public partial class ImportChartController(StaticSettings settings, ILogger<Stat
         }
         catch (Exception e)
         {
+            errors.Add(new ImportChartMessage($"MaiLib 解析谱面难度 {level} 时报错：\n{MaiLibErrMsgRegex().Replace(e.Message, "")}\n" +
+                                              $"这往往是谱面中的语句不够规范导致的，您可尝试根据报错对谱面进行修复。", MessageLevel.Warning));
             logger.LogWarning(e, "无法在手动修正错误后解析谱面");
         }
 
@@ -333,8 +335,15 @@ public partial class ImportChartController(StaticSettings settings, ILogger<Stat
     [GeneratedRegex(@"\|\|.*$", RegexOptions.Multiline)]
     private static partial Regex SimaiCommentRegex();
 
-    [GeneratedRegex(@"#.*$", RegexOptions.Multiline)]
+    /*
+     * 根据[simai文档](https://w.atwiki.jp/simai/pages/1002.html)，井号如果出现在[]或{}内是合法语法，并非注释。
+     * 因此在尝试匹配注释时，应该排除掉#前面有未闭合的[或{的情况。
+     */
+    [GeneratedRegex(@"(?<!\[[^\]]*|\{[^\}]*)#.*$", RegexOptions.Multiline)]
     private static partial Regex SimaiCommentRegex2();
+
+    [GeneratedRegex(@"Original Stack.*", RegexOptions.Singleline)]
+    private static partial Regex MaiLibErrMsgRegex();
 
     [HttpPost]
     // 创建完 Music 后调用
