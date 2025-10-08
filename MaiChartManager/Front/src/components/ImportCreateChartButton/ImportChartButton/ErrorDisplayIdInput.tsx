@@ -72,7 +72,11 @@ export default defineComponent({
                 return <NAlert key={i} type={type} title={error.name} class={`${error.isPaid && 'cursor-pointer'}`}
                   // @ts-ignore
                                onClick={() => error.isPaid && (showNeedPurchaseDialog.value = true)}
-                >{error.message}</NAlert>
+                >
+                  <div class="whitespace-pre-wrap">
+                    {error.message}
+                  </div>
+                </NAlert>
               })
             }
           </NFlex>
@@ -153,6 +157,9 @@ export default defineComponent({
                                 </NFlex>
                             </NFlex>
                         </NFormItem>
+                        <NCheckbox v-model:checked={props.savedOptions.yuv420p}>
+                            转换 USM 时使用 YUV420P 颜色空间
+                        </NCheckbox>
                     </NFlex>
                 </NCollapseItem>
             </NCollapse>

@@ -44,9 +44,10 @@ export default defineComponent({
       const h264 = shouldUseH264();
       console.log('use h264', h264);
       body.append('h264', h264.toString());
-      body.append('file', movie);
       body.append('padding', offset.toString());
       body.append('noScale', noScale.value.toString());
+      body.append('yuv420p', savedOptions.value.yuv420p.toString());
+      body.append('file', movie);
       const controller = new AbortController();
       fetchEventSource(getUrl(`SetMovieApi/${selectedADir.value}/${id}`), {
         signal: controller.signal,
@@ -171,6 +172,9 @@ export default defineComponent({
               </NFlex>
             </NFlex>
           </NFormItem>
+          <NCheckbox v-model:checked={savedOptions.value.yuv420p}>
+            转换 USM 时使用 YUV420P 颜色空间
+          </NCheckbox>
         </NFlex>,
         footer: () => <NFlex justify="end">
           <NButton onClick={okResolve.value as any}>确定</NButton>

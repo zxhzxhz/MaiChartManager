@@ -48,7 +48,7 @@ export default defineComponent({
             H264 编码器: {version.value.h264Encoder}
           </div>
           {version.value.license === LicenseStatus.Active && <div>
-            感谢你的支持！
+            感谢你的支持，赞助版功能已启用！
             <NA
               // @ts-ignore
               href="https://afdian.com/a/Clansty"

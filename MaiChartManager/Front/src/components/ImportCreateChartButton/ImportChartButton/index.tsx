@@ -100,9 +100,10 @@ export default defineComponent({
       const h264 = shouldUseH264();
       console.log('use h264', h264);
       body.append('h264', h264.toString());
-      body.append('file', movie);
       body.append('padding', offset.toString());
       body.append('noScale', savedOptions.value.noScale.toString());
+      body.append('yuv420p', savedOptions.value.yuv420p.toString());
+      body.append('file', movie);
       const controller = new AbortController();
       fetchEventSource(getUrl(`SetMovieApi/${selectedADir.value}/${id}`), {
         signal: controller.signal,

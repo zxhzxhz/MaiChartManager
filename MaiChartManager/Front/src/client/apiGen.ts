@@ -171,7 +171,6 @@ export interface IConfigSectionAttribute {
   exampleHidden?: boolean;
   defaultOn?: boolean;
   alwaysEnabled?: boolean;
-  name?: string | null;
 }
 
 export interface IEntryState {
@@ -1399,6 +1398,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         file?: File;
         noScale?: boolean;
         h264?: boolean;
+        yuv420p?: boolean;
       },
       params: RequestParams = {},
     ) =>

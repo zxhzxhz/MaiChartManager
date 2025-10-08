@@ -95,7 +95,7 @@ public class MovieConvertController(StaticSettings settings, ILogger<MovieConver
 
     [HttpPut]
     [DisableRequestSizeLimit]
-    public async Task SetMovie(int id, [FromForm] double padding, IFormFile file, [FromForm] bool noScale, [FromForm] bool h264, string assetDir)
+    public async Task SetMovie(int id, [FromForm] double padding, IFormFile file, [FromForm] bool noScale, [FromForm] bool h264, [FromForm] bool yuv420p, string assetDir)
     {
         id %= 10000;
 
@@ -170,7 +170,11 @@ public class MovieConvertController(StaticSettings settings, ILogger<MovieConver
                 .AddParameter("-hwaccel dxva2", ParameterPosition.PreInput)
                 .UseMultiThread(true);
             if (!h264)
+            {
                 conversion.AddParameter("-cpu-used 5");
+                if (yuv420p)
+                    conversion.AddParameter("-pix_fmt yuv420p");
+            }
             if (!noScale && padding <= 0)
             {
                 conversion.AddParameter($"-vf {vf}");
