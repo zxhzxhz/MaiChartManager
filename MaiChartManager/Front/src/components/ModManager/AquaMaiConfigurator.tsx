@@ -111,7 +111,10 @@ export default defineComponent({
           <NInput v-model:value={search.value} placeholder="搜索" size="small" clearable ref={searchRef}/>
         </div>
         {bigSections.value.map((big) => <div id={big} key={big}>
-          <NDivider titlePlacement="left" class="mt-0! pt-8">{big}</NDivider>
+          <NDivider titlePlacement="left" class="mt-0! pt-8 sticky top-0! bg-white/80! z-1"
+            // @ts-ignore
+            onClick={() => location.href = `#${big}`}
+          >{big}</NDivider>
           {filteredSections.value?.filter(it => {
             if (props.useNewSort) {
               return configSort.value[big!].includes(it.path!);
