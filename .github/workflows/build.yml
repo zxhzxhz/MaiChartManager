@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  workflow_dispatch
+  
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    env:
+      Solution_Name: Sitreamai.sln
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore the application
+      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      env:
+        Configuration: Debug
+    
+    - name: Build 
+      run: msbuild /t:build Sitreamai.sln /p:Platform=x64 -maxcpucount:8
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Package
+        path: ./
