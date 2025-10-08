@@ -1,69 +1,13 @@
 import { defineComponent, PropType, ref, computed } from 'vue';
-import { ConfigDto, Entry, IEntryState, ISectionState, Section } from "@/client/apiGen";
+import { ConfigDto, IEntryState, ISectionState, Section } from "@/client/apiGen";
 import { NAnchor, NAnchorLink, NDivider, NFlex, NForm, NFormItem, NInput, NInputNumber, NScrollbar, NSelect, NSwitch } from "naive-ui";
-import { capitalCase } from "change-case";
-import comments from "./modComments.yaml";
 import _ from "lodash";
-import { KeyCodeName } from "@/components/ModManager/types/KeyCodeName";
 import ProblemsDisplay from "@/components/ProblemsDisplay";
 import configSortStub from './configSort.yaml'
 import { useMagicKeys, whenever } from "@vueuse/core";
-
-const sectionPanelOverrides = import.meta.glob('./sectionPanelOverride/*/index.tsx', { eager: true })
-const getSectionPanelOverride = (path: string) => {
-  return (sectionPanelOverrides[`./sectionPanelOverride/${path}/index.tsx`] as any)?.default
-}
-
-const getNameForPath = (path: string, name: string, nameBuiltin?: string | null) => {
-  // if (comments.nameOverrides[path]) return comments.nameOverrides[path]
-  return nameBuiltin || capitalCase(name)
-}
-
-const ConfigEntry = defineComponent({
-  props: {
-    entry: { type: Object as PropType<Entry>, required: true },
-    entryState: { type: Object as PropType<IEntryState>, required: true },
-  },
-  setup(props, { emit }) {
-    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!, props.entry.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em" showFeedback={false}
-      // @ts-ignore
-                            title={props.entry.path!}
-    >
-      <NFlex vertical class="w-full ws-pre-line">
-        <NFlex class="h-34px" align="center">
-          {(() => {
-            const choices = comments.options[props.entry.path!]
-            if (choices) {
-              return <NSelect v-model:value={props.entryState.value} options={choices} clearable/>
-            }
-            switch (props.entry.fieldType) {
-              case 'System.Boolean':
-                return <NSwitch v-model:value={props.entryState.value}/>;
-              case 'System.String':
-                return <NInput v-model:value={props.entryState.value} placeholder="" onUpdateValue={v => props.entryState.value = typeof v === 'string' ? v : ''}/>;
-              case 'System.Int32':
-              case 'System.Int64':
-                return <NInputNumber value={props.entryState.value} onUpdateValue={v => props.entryState.value = typeof v === 'number' ? v : 0} placeholder="" precision={0} step={1}/>;
-              case 'System.UInt32':
-              case 'System.UInt64':
-                return <NInputNumber value={props.entryState.value} onUpdateValue={v => props.entryState.value = typeof v === 'number' ? v : 0} placeholder="" precision={0} step={1} min={0}/>;
-              case 'System.Byte':
-                return <NInputNumber value={props.entryState.value} onUpdateValue={v => props.entryState.value = typeof v === 'number' ? v : 0} placeholder="" precision={0} step={1} min={0} max={255}/>;
-              case 'System.Double':
-              case 'System.Single':
-                return <NInputNumber value={props.entryState.value} onUpdateValue={v => props.entryState.value = typeof v === 'number' ? v : 0} placeholder="" step={.1}/>;
-              case 'AquaMai.Config.Types.KeyCodeOrName':
-                return <NSelect v-model:value={props.entryState.value} options={Object.entries(KeyCodeName).map(([label, value]) => ({ label, value }))}/>;
-            }
-            return `不支持的类型: ${props.entry.fieldType}`;
-          })()}
-          {comments.shouldEnableOptions[props.entry.path!] && !props.entryState.value && <ProblemsDisplay problems={['需要开启此选项']}/>}
-        </NFlex>
-        {comments.commentOverrides[props.entry.path!] || props.entry.attribute?.comment?.commentZh}
-      </NFlex>
-    </NFormItem>;
-  },
-});
+import ConfigEntry from './ConfigEntry';
+import { getSectionPanelOverride, getNameForPath } from './utils';
+import comments from "./modComments.yaml";
 
 const ConfigSection = defineComponent({
   props: {
@@ -89,7 +33,7 @@ const ConfigSection = defineComponent({
       </NFormItem>}
       {props.sectionState.enabled && (
         CustomPanel ?
-          <CustomPanel entryStates={props.entryStates} sectionState={props.sectionState}/> :
+          <CustomPanel entryStates={props.entryStates} sectionState={props.sectionState} section={props.section}/> :
           !!props.section.entries?.length && <NFlex vertical class="p-l-15">
             {props.section.entries?.filter(it => !it.attribute?.hideWhenDefault || (it.attribute?.hideWhenDefault && !props.entryStates[it.path!].isDefault))
               .map((entry) => <ConfigEntry key={entry.path!} entry={entry} entryState={props.entryStates[entry.path!]}/>)}

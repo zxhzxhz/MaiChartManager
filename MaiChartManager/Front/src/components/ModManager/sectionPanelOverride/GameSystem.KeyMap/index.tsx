@@ -1,12 +1,14 @@
 import {defineComponent, h, PropType} from "vue";
 import {NFlex, NFormItem, NGrid, NGridItem, NSelect, NSwitch} from "naive-ui";
 import {KeyCodeID} from "@/components/ModManager/types/KeyCodeID";
-import {IEntryState, ISectionState} from "@/client/apiGen";
+import {IEntryState, ISectionState, Section} from "@/client/apiGen";
+import ConfigEntry from "../../ConfigEntry";
 
 const options = Object.entries(KeyCodeID).map(([key, value]) => ({label: key, value}))
 
 export default defineComponent({
   props: {
+    section: { type: Object as PropType<Section>, required: true },
     entryStates: {type: Object as PropType<Record<string, IEntryState>>, required: true},
     sectionState: {type: Object as PropType<ISectionState>, required: true},
   },
@@ -40,6 +42,12 @@ export default defineComponent({
           </NFormItem>
         </NGridItem>
       </NGrid>
+      <NFlex vertical class="p-l-15">
+        {props.section.entries?.filter(it=>
+          ['GameSystem.KeyMap.Autoplay','GameSystem.KeyMap.DisableIO4','GameSystem.KeyMap.DisableDebugInput','GameSystem.KeyMap.DisableDebugFeatureHotkeys']
+          .includes(it.path!))
+          .map((entry) => <ConfigEntry key={entry.path!} entry={entry} entryState={props.entryStates[entry.path!]}/>)}
+      </NFlex>
     </div>;
   }
 })
