@@ -1,6 +1,6 @@
 import { computed, defineComponent, PropType, reactive, ref } from "vue";
 import { DataTableBaseColumn, DataTableColumns, NButton, NDataTable, NFlex, NInput } from "naive-ui";
-import { addVersionList, genreList, musicList, musicListAll, selectedADir, selectMusicId, version } from "@/store/refs";
+import { addVersionList, b15ver, genreList, musicList, musicListAll, selectedADir, selectMusicId, version } from "@/store/refs";
 import { MusicXmlWithABJacket } from "@/client/apiGen";
 import JacketBox from "@/components/JacketBox";
 import { GenreOption } from "@/components/GenreInput";
@@ -68,7 +68,7 @@ export default defineComponent({
         sorter: 'default',
         filterOptions: ['B35', 'B15'].map(it => ({ label: it, value: it })),
         filter: (value, row) => {
-          const type = row.version! < 20000 + version.value!.gameVersion! * 100 ? 'B35' : 'B15';
+          const type = row.version! < b15ver.value ? 'B35' : 'B15';
           return value === type;
         }
       },
@@ -76,14 +76,14 @@ export default defineComponent({
         title: '添加版本',
         key: 'addVersionId',
         render: (row) => <GenreOption genre={addVersionList.value.find(it => it.id === row.addVersionId)}/>,
-        filter: "default",
+        filter: (value, row) => row.addVersionId === value,
         filterOptions: addVersionList.value.map(it => ({ label: it.genreName!, value: it.id! }))
       },
       {
         title: '流派',
         key: 'genreId',
         render: (row) => <GenreOption genre={genreList.value.find(it => it.id === row.genreId)}/>,
-        filter: "default",
+        filter: (value, row) => row.genreId === value,
         filterOptions: genreList.value.map(it => ({ label: it.genreName!, value: it.id! }))
       },
       {

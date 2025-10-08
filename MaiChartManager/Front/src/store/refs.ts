@@ -120,3 +120,7 @@ export const updateAll = async () => Promise.all([
   updateModInfo(),
   updateModUpdateInfo(),
 ])
+
+export const gameVersion = computed(() => version.value?.gameVersion || 45)
+// 从1.60起，b15算最近两个版本
+export const b15ver = computed(() => 20000 + (gameVersion.value >= 60 ? gameVersion.value - 5 : gameVersion.value) * 100);
