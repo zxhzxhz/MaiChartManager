@@ -1,6 +1,6 @@
 import { defineComponent, PropType, ref, computed } from 'vue';
 import { ConfigDto, IEntryState, ISectionState, Section } from "@/client/apiGen";
-import { NAnchor, NAnchorLink, NDivider, NFlex, NForm, NFormItem, NInput, NInputNumber, NScrollbar, NSelect, NSwitch } from "naive-ui";
+import { NAnchor, NAnchorLink, NButton, NDivider, NFlex, NForm, NFormItem, NInput, NInputNumber, NPopover, NScrollbar, NSelect, NSwitch } from "naive-ui";
 import _ from "lodash";
 import ProblemsDisplay from "@/components/ProblemsDisplay";
 import configSortStub from './configSort.yaml'
@@ -19,7 +19,7 @@ const ConfigSection = defineComponent({
     const CustomPanel = getSectionPanelOverride(props.section.path!);
 
     return () => <NFlex vertical class="p-1 border-transparent border-solid border-1px rd hover:border-yellow-5">
-      {!props.section.attribute!.alwaysEnabled && <NFormItem label={getNameForPath(props.section.path!, props.section.path!.split('.').pop()!, props.section.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em" showFeedback={false}
+      {!props.section.attribute!.alwaysEnabled && <NFormItem label={getNameForPath(props.section.path!, props.section.path!.split('.').pop()!, props.section.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="9em" showFeedback={false}
         // @ts-ignore
                                                              title={props.section.path!}
       >
@@ -34,7 +34,7 @@ const ConfigSection = defineComponent({
       {props.sectionState.enabled && (
         CustomPanel ?
           <CustomPanel entryStates={props.entryStates} sectionState={props.sectionState} section={props.section}/> :
-          !!props.section.entries?.length && <NFlex vertical class="p-l-15">
+          !!props.section.entries?.length && <NFlex vertical class="p-l-15 max-[900px]:p-l-10 max-[500px]:p-l-5!">
             {props.section.entries?.filter(it => !it.attribute?.hideWhenDefault || (it.attribute?.hideWhenDefault && !props.entryStates[it.path!].isDefault))
               .map((entry) => <ConfigEntry key={entry.path!} entry={entry} entryState={props.entryStates[entry.path!]}/>)}
           </NFlex>
@@ -89,16 +89,25 @@ export default defineComponent({
       return filteredSections.value?.filter(it => !knownSections.includes(it.path!) && !it.attribute!.exampleHidden) || [];
     });
 
-    return () => <div class="grid cols-[14em_auto]">
-      <NAnchor type="block" offsetTarget="#scroll">
+    return () => <div class="grid cols-[14em_auto] max-[900px]:cols-1">
+      <NAnchor type="block" offsetTarget="#scroll" class={["max-[900px]:hidden"]}>
         {bigSections.value.map((key) => <NAnchorLink key={key} title={key} href={`#${key}`}/>)}
         {otherSection.value.length > 0 && <NAnchorLink key="其他" title="其他" href="#其他"/>}
       </NAnchor>
-      <NScrollbar class="h-75vh p-2 relative"
+      <NScrollbar class="h-[calc(100dvh-160px)] p-2 relative"
         // @ts-ignore
                   id="scroll"
       >
-        <div class={'px-2 absolute top-1 left-2 right-2 z-200'}>
+        <div class={'absolute top-1 left-4 max-[900px]:left-0 right-4 z-200 flex gap-2'}>
+          <div class={["min-[900px]:hidden"]}>
+            <NPopover trigger="click">{{
+              trigger: () => <NButton secondary size="small"><span class="i-ic-baseline-menu text-lg"/></NButton>,
+              default: () => <NAnchor type="block" offsetTarget="#scroll">
+                {bigSections.value.map((key) => <NAnchorLink key={key} title={key} href={`#${key}`}/>)}
+                {otherSection.value.length > 0 && <NAnchorLink key="其他" title="其他" href="#其他"/>}
+              </NAnchor>
+            }}</NPopover>
+          </div>
           <NInput v-model:value={search.value} placeholder="搜索" size="small" clearable ref={searchRef}/>
         </div>
         {bigSections.value.map((big) => <div id={big} key={big}>

@@ -13,7 +13,7 @@ export default defineComponent({
     entryState: { type: Object as PropType<IEntryState>, required: true },
   },
   setup(props, { emit }) {
-    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!, props.entry.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="10em" showFeedback={false}
+    return () => <NFormItem label={getNameForPath(props.entry.path!, props.entry.name!, props.entry.attribute?.comment?.nameZh)} labelPlacement="left" labelWidth="9em" showFeedback={false}
       // @ts-ignore
                             title={props.entry.path!}
     >

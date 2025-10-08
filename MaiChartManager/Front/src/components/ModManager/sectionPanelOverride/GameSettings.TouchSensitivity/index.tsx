@@ -48,7 +48,7 @@ export default defineComponent({
       <NFlex vertical>
         应用预设到全局
         <NButtonGroup class="mb">
-          {Array.from({length: 11}, (_, i) => <NButton secondary class={i > 0 ? 'b-l b-l-solid b-l-[rgba(255,255,255,0.5)]' : ''} onClick={() => applyPreset(i)}>{i - 5 > 0 && '+'}{i - 5}</NButton>)}
+          {Array.from({length: 11}, (_, i) => <NButton size="small" secondary class={i > 0 ? 'b-l b-l-solid b-l-[rgba(255,255,255,0.5)]' : ''} onClick={() => applyPreset(i)}>{i - 5 > 0 && '+'}{i - 5}</NButton>)}
         </NButtonGroup>
         {selected.value ? <>
             {selected.value.toUpperCase()} 的灵敏度设置

@@ -7,6 +7,7 @@ import { compareVersions, latestVersion, shouldShowUpdate } from "./shouldShowUp
 import { useStorage } from "@vueuse/core";
 import _ from "lodash";
 import ModInstallDropdown from "@/components/ModManager/ModInstallDropdown";
+import styles from "./styles.module.sass";
 
 export default defineComponent({
   props: {
@@ -97,25 +98,25 @@ export default defineComponent({
 
     return () => <NModal
       preset="card"
-      class="w-[min(90vw,100em)]"
+      class={["w-[min(99dvw,100em)]", styles.modal]}
       title="Mod 管理"
       v-model:show={show.value}
     >
       {!!modInfo.value && <NFlex vertical>
         <NFlex align="center">
-          MelonLoader:
-          {modInfo.value.melonLoaderInstalled ? <span class="c-green-6">已安装</span> : <span class="c-red-6">未安装</span>}
+          <span class="max-[1060px]:hidden">MelonLoader:</span>
+          {modInfo.value.melonLoaderInstalled ? <span class="c-green-6 max-[1060px]:hidden">已安装</span> : <span class="c-red-6">未安装</span>}
           {!modInfo.value.melonLoaderInstalled && <NButton secondary loading={installingMelonLoader.value} onClick={installMelonLoader}>安装</NButton>}
-          <div class="w-8"/>
-          AquaMai:
+          <div class={["w-8", "max-[1060px]:hidden"]}/>
+          <span class="max-[1060px]:hidden">AquaMai:</span>
           {modInfo.value.aquaMaiInstalled ?
-            !shouldShowUpdate.value ? <span class="c-green-6">已安装</span> : <span class="c-orange">可更新</span> :
+            !shouldShowUpdate.value ? <span class="c-green-6 max-[1060px]:hidden">已安装</span> : <span class="c-orange">可更新</span> :
             <span class="c-red-6">未安装</span>}
           <ModInstallDropdown updateAquaMaiConfig={updateAquaMaiConfig}/>
-          已安装:
-          <span>v{modInfo.value.aquaMaiVersion}</span>
-          可安装:
-          <span class={shouldShowUpdate.value ? "c-orange" : ""}>{latestVersion.value.version}</span>
+          <span class="max-[1060px]:hidden">已安装:</span>
+          <span class="max-[450px]:hidden">v{modInfo.value.aquaMaiVersion}</span>
+          <span class="max-[1060px]:hidden">可安装:</span>
+          <span class={[shouldShowUpdate.value && "c-orange", "max-[1060px]:hidden"]}>{latestVersion.value.version}</span>
           <NButton secondary onClick={() => api.KillGameProcess()}>
             关闭游戏进程
           </NButton>
