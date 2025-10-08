@@ -34,7 +34,7 @@ export default defineComponent({
     return () => (
       <NModal
         preset="card"
-        class="w-[min(30vw,25em)]"
+        class="w-25em"
         title={`创建乐曲`}
         v-model:show={show.value}
       >{{

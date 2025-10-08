@@ -40,7 +40,7 @@ export default defineComponent({
 
           <NModal
             preset="card"
-            class="w-[min(70vw,80em)]"
+            class="w-80em max-w-100dvw"
             title={`${text.value}管理`}
             show={show.value !== EDIT_TYPE.None}
             onUpdateShow={() => show.value = EDIT_TYPE.None}

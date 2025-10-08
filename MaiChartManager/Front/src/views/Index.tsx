@@ -1,5 +1,5 @@
-import { defineComponent, onMounted } from 'vue';
-import { NFlex, NScrollbar, useDialog, useNotification } from "naive-ui";
+import { defineComponent, onMounted, ref } from 'vue';
+import { NButton, NFlex, NScrollbar, useDialog, useNotification } from "naive-ui";
 import MusicList from "@/components/MusicList";
 import GenreVersionManager from "@/components/GenreVersionManager";
 import { globalCapture, selectedADir, selectedMusic, updateAddVersionList, updateAll, updateAssetDirs, updateGenreList, updateMusicList, updateVersion, version } from "@/store/refs";
@@ -12,6 +12,7 @@ import AssetDirsManager from "@/components/AssetDirsManager";
 import ImportCreateChartButton from "@/components/ImportCreateChartButton";
 import { HardwareAccelerationStatus, LicenseStatus } from "@/client/apiGen";
 import CopyToButton from "@/components/CopyToButton";
+import TransitionOpacity from '@/components/TransitionOpacity';
 
 export default defineComponent({
   setup() {
@@ -55,34 +56,46 @@ export default defineComponent({
         globalCapture(err, "初始化失败")
       }
     })
-  },
-  render() {
-    return <NFlex justify="center">
-      <div class="grid cols-[40em_1fr] w-[min(100rem,100%)]">
-        <div class="p-xy h-100vh">
-          <MusicList/>
+
+    const mobileShowMenu = ref(false);
+
+    return () => <NFlex justify="center">
+      <div class="grid cols-[40em_1fr] w-[min(100rem,100%)] max-[1440px]:cols-1">
+        <div class={[
+          "p-xy h-100dvh",
+          "max-[1440px]:absolute max-[1440px]:left-0 max-[1440px]:w-40em max-[1440px]:max-w-100dvw  z-10 transition-transform duration-300",
+          "max-[1440px]:bg-white max-[1440px]:border-r-solid max-[1440px]:border-r-1 max-[1440px]:border-r-gray-200",
+          mobileShowMenu.value ? "max-[1440px]:translate-x-0" : "max-[1440px]:translate-x-[-100%]"
+        ]}>
+          <MusicList toggleMenu={() => mobileShowMenu.value = false} />
         </div>
-        <NFlex vertical class="p-xy h-100vh" size="large" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 16px, rgba(255, 255, 255, 0.1) calc(100% - 16px), transparent 100%)' }}>
+        <TransitionOpacity>
+          {mobileShowMenu.value && <div class={["min-[1440px]:hidden absolute-full z-5 bg-white/70 backdrop-blur-sm"]} onClick={() => mobileShowMenu.value = false} />}
+        </TransitionOpacity>
+        <NFlex vertical class="p-xy h-100dvh" size="large" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 16px, rgba(255, 255, 255, 0.1) calc(100% - 16px), transparent 100%)' }}>
           <NFlex class="shrink-0" align="center">
-            <AssetDirsManager/>
+            <NButton secondary onClick={() => mobileShowMenu.value = true} class="min-[1440px]:hidden">
+              <span class="i-ic-baseline-menu text-lg" />
+            </NButton>
+            <AssetDirsManager />
             {selectedADir.value !== 'A000' && <>
-              <GenreVersionManager/>
+              <GenreVersionManager />
             </>}
-            <ModManager/>
+            <ModManager />
 
-            <div class="grow-1"/>
+            <div class="grow-1" />
 
-            {!!selectedMusic.value && <CopyToButton/>}
+            {!!selectedMusic.value && <CopyToButton />}
             {selectedADir.value === 'A000' ?
               '请选择一个 A000 以外的目录来编辑' :
               <>
-                <MusicSelectedTopRightToolbar/>
-                <ImportCreateChartButton/>
+                <MusicSelectedTopRightToolbar />
+                <ImportCreateChartButton />
               </>}
-            <VersionInfo/>
+            <VersionInfo />
           </NFlex>
           <NScrollbar class="grow-1">
-            <MusicEdit/>
+            <MusicEdit />
           </NScrollbar>
         </NFlex>
       </div>

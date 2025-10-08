@@ -16,12 +16,12 @@ export default defineComponent({
 
       <NModal
         preset="card"
-        class="w-[min(45vw,60em)]"
+        class="w-60em max-w-100dvw"
         title="关于"
         v-model:show={show.value}
       >
         <NFlex vertical class="text-4" size="large">
-          <AppIcon class="mb-6"/>
+          <AppIcon class="mb-6 max-[540px]:scale-75"/>
           <div class="flex justify-center gap-1 text-10 c-gray-4">
             <a class="i-mdi-github hover:c-#1f2328 transition-300" href="https://github.com/clansty/MaiChartManager" target="_blank"/>
             <a class="i-ic-baseline-telegram hover:c-#39a6e6 transition-300" href="https://t.me/MaiChartManager" target="_blank"/>
