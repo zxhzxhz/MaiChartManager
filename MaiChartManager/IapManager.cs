@@ -21,6 +21,8 @@ public static class IapManager
 
     public static async Task Init()
     {
+        License = LicenseStatus.Active;
+        return;
 # if CRACK
         License = LicenseStatus.Active;
         return;
