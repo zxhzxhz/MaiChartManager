@@ -1,9 +1,9 @@
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { AppVersionResult, ConfigDto, GameModInfo, GenreXml, GetAssetsDirsResult, MusicXmlWithABJacket, VersionXml } from "@/client/apiGen";
 import api, { aquaMaiVersionConfig } from "@/client/api";
 import { captureException } from "@sentry/vue";
 import posthog from "posthog-js";
-import { useStorage } from "@vueuse/core";
+import { useStorage, useWindowFocus, whenever } from "@vueuse/core";
 import deniedOgg from "@/assets/Denied.ogg";
 
 export const error = ref();
@@ -59,6 +59,26 @@ export const aquaMaiConfig = ref<ConfigDto>()
 export const modUpdateInfo = ref<Awaited<ReturnType<typeof aquaMaiVersionConfig.getGetConfig>>['data']>([{
   type: 'builtin',
 }])
+
+export const saveMusicIfNeeded = async (id: number) => {
+  if (!id) return;
+  const music = musicListAll.value.find(m => m.id === id);
+  if (!music?.modified) return;
+  await api.SaveMusic(id, selectedADir.value);
+  await updateMusicList();
+}
+
+const focused = useWindowFocus()
+
+whenever(() => !focused.value, () => {
+  saveMusicIfNeeded(selectMusicId.value);
+})
+
+watch(selectMusicId, async (n, o) => {
+  if (n === o) return;
+  if (!o) return;
+  await saveMusicIfNeeded(o);
+})
 
 export const updateGenreList = async () => {
   const response = await api.GetAllGenres();
