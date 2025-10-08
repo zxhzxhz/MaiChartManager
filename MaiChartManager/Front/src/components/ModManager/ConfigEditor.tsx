@@ -23,7 +23,6 @@ export default defineComponent({
     const configReadErrTitle = ref('')
     const dialog = useDialog()
     const installingMelonLoader = ref(false)
-    const useNewSort = useStorage('useNewSort', true)
     const message = useMessage();
 
     const updateAquaMaiConfig = async () => {
@@ -117,14 +116,15 @@ export default defineComponent({
           <span>v{modInfo.value.aquaMaiVersion}</span>
           可安装:
           <span class={shouldShowUpdate.value ? "c-orange" : ""}>{latestVersion.value.version}</span>
-          <NSwitch v-model:value={useNewSort.value} class="m-l"/>
-          使用新的排序方式
+          <NButton secondary onClick={() => api.KillGameProcess()}>
+            关闭游戏进程
+          </NButton>
         </NFlex>
         {configReadErr.value ? <NFlex vertical justify="center" align="center" class="min-h-100">
           <div class="text-8">AquaMai 未安装或需要更新</div>
           <div class="c-gray-5 text-lg">{configReadErr.value}</div>
           <div class="c-gray-4 text-sm">{configReadErrTitle.value}</div>
-        </NFlex> : <AquaMaiConfigurator config={config.value!} useNewSort={useNewSort.value}/>}
+        </NFlex> : <AquaMaiConfigurator config={config.value!} useNewSort={true}/>}
       </NFlex>}
     </NModal>;
   }

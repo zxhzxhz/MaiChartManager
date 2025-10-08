@@ -1384,6 +1384,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Mod
+     * @name KillGameProcess
+     * @request POST:/MaiChartManagerServlet/KillGameProcessApi
+     */
+    KillGameProcess: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/MaiChartManagerServlet/KillGameProcessApi`,
+        method: "POST",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags MovieConvert
      * @name SetMovie
      * @request PUT:/MaiChartManagerServlet/SetMovieApi/{assetDir}/{id}

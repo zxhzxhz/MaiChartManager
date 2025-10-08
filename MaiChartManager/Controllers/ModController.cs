@@ -354,4 +354,20 @@ public class ModController(StaticSettings settings, ILogger<ModController> logge
         }
         throw new InvalidOperationException("Failed to download AquaMai from all urls", lastException);
     }
+
+    [HttpPost]
+    public void KillGameProcess()
+    {
+        foreach (var process in Process.GetProcessesByName("Sinmai"))
+        {
+            try
+            {
+                process.Kill();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Failed to kill Sinmai process with id {Id}", process.Id);
+            }
+        }
+    }
 }
