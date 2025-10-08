@@ -125,24 +125,44 @@ public class MusicXmlWithABJacket(string filePath, string gamePath, string asset
     {
         if (HasJacket)
         {
-            FileSystem.DeleteFile(JacketPath);
+            try {
+                FileSystem.DeleteFile(JacketPath);
+            } catch {
+                Console.WriteLine($"删除 jacket 失败: {JacketPath}");
+            }
         }
 
         if (StaticSettings.AcbAwb.TryGetValue($"music{NonDxId:000000}.acb", out var acb))
         {
-            FileSystem.DeleteFile(acb);
+            try {
+                FileSystem.DeleteFile(acb);
+            } catch {
+                Console.WriteLine($"删除 acb 失败: {acb}");
+            }
         }
 
         if (StaticSettings.AcbAwb.TryGetValue($"music{NonDxId:000000}.awb", out var awb))
         {
-            FileSystem.DeleteFile(awb);
+            try {
+                FileSystem.DeleteFile(awb);
+            } catch {
+                Console.WriteLine($"删除 awb 失败: {awb}");
+            }
         }
 
         if (StaticSettings.MovieDataMap.TryGetValue(NonDxId, out var movieData))
         {
-            FileSystem.DeleteFile(movieData);
+            try {
+                FileSystem.DeleteFile(movieData);
+            } catch {
+                Console.WriteLine($"删除 movieData 失败: {movieData}");
+            }
         }
 
-        FileSystem.DeleteDirectory(Path.GetDirectoryName(FilePath), DeleteDirectoryOption.DeleteAllContents);
+        try {
+            FileSystem.DeleteDirectory(Path.GetDirectoryName(FilePath), DeleteDirectoryOption.DeleteAllContents);
+        } catch {
+            Console.WriteLine($"删除目录失败: {Path.GetDirectoryName(FilePath)}");
+        }
     }
 }
